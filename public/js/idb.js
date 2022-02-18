@@ -19,7 +19,7 @@ request.onsuccess = function(event) {
 
     if (navigator.onLine) {
         // need to include variable of True or False into function
-        sendTransaction();
+        sendBudgetTransaction();
     }
 };
 
@@ -33,7 +33,7 @@ function saveRecord(record) {
     trackerObjectStore.add(record);
 };
 
-function sendTransaction() {
+function sendBudgetTransaction() {
     const transaction = db.transaction(["tracker"], "readwrite");
     const trackerObjectStore = transaction.objectStore("tracker");
     const getAll = trackerObjectStore.getAll();
@@ -41,7 +41,7 @@ function sendTransaction() {
         if (getAll.result.length > 0) {
             fetch("/api/transaction", {
                 method: "POST",
-                body: JSON.stringify(transaction),
+                body: JSON.stringify(getAll.result),
                 headers: {
                   Accept: "application/json, text/plain, */*",
                   "Content-Type": "application/json"
@@ -62,4 +62,4 @@ function sendTransaction() {
     }
 };
 
-window.addEventListener("online", sendTransaction);
+window.addEventListener("online", sendBudgetTransaction);
